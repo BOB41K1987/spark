@@ -1,0 +1,50 @@
+source sparksrc
+{
+	type			= mysql
+
+	sql_host		= localhost
+	sql_user		= root
+	sql_pass		= 
+	sql_db			= spark
+	sql_port		= 3306	# optional, default is 3306
+
+	sql_query_pre		= SET CHARACTER_SET_RESULTS=utf8
+        sql_query_pre		= SET NAMES utf8
+        sql_query_pre		= SET CHARACTER SET utf8
+	
+	sql_query		= SELECT id, name FROM good
+	
+	sql_attr_uint           = id
+	sql_field_string	= name
+}
+
+
+index spark
+{
+	source			= sparksrc
+	path			= C:/Sphinx/data/spark
+	min_infix_len           = 2
+}
+
+
+indexer
+{
+	mem_limit		= 128M
+}
+
+
+searchd
+{
+	listen			= 9312
+	listen			= 9306:mysql41
+	log			= C:/Sphinx/log/searchd.log
+	query_log		= C:/Sphinx/log/query.log
+	read_timeout		= 5
+	max_children		= 30
+	pid_file		= C:/Sphinx/log/searchd.pid
+	seamless_rotate		= 1
+	preopen_indexes		= 1
+	unlink_old		= 1
+	workers			= threads # for RT to work
+	binlog_path		= C:/Sphinx/data
+}
